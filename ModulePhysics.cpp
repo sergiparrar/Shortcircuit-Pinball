@@ -36,57 +36,59 @@ bool ModulePhysics::Start()
 	ground = world->CreateBody(&bd);
 
 	// we define a shape to be our walls of the pinball
-	int pinball_background[56] = {
-		192, 91,
-		375, -12,
-		333, -193,
-		295, -192,
-		265, -210,
-		307, -320,
-		318, -319,
-		397, -2,
-		427, 90,
-		450, 89,
-		290, -499,
-		282, -511,
-		268, -523,
-		242, -533,
-		218, -539,
-		96, -539,
-		45, -539,
-		22, -531,
-		1, -520,
-		-15, -504,
-		-49, -387,
-		-25, -320,
-		-62, -306,
-		-31, -212,
-		-64, -194,
-		-101, -195,
-		-150, -11,
-		26, 90
+	int pinball_background[60] = {
+		675, 657,
+		504, 53,
+		490, 36,
+		467, 24,
+		441, 16,
+		274, 16,
+		239, 23,
+		210, 37,
+		196, 52,
+		161, 167,
+		188, 236,
+		175, 210,
+		140, 229,
+		178, 342,
+		148, 357,
+		112, 361,
+		54, 553,
+		247, 661,
+		231, 735,
+		409, 728,
+		401, 655,
+		597, 546,
+		552, 354,
+		516, 352,
+		483, 338,
+		518, 239,
+		524, 236,
+		530, 241,
+		631, 656,
+		675, 657
 	};
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
-	body.position.Set(PIXELS_TO_METERS(215), PIXELS_TO_METERS(540));
+	body.position.Set(PIXELS_TO_METERS(0), PIXELS_TO_METERS(0));
 
 	b2Body* pinball_walls = world->CreateBody(&body);
 
 	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[56 / 2];
+	b2Vec2* p = new b2Vec2[60 / 2];
 
-	for (uint i = 0; i < 56 / 2; ++i)
+	for (uint i = 0; i < 60 / 2; ++i)
 	{
 		p[i].x = PIXELS_TO_METERS(pinball_background[i * 2 + 0]);
 		p[i].y = PIXELS_TO_METERS(pinball_background[i * 2 + 1]);
 	}
 
-	shape.CreateLoop(p, 56 / 2);
+	shape.CreateLoop(p, 60 / 2);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	pinball_walls->CreateFixture(&fixture);
+	pinball_walls->CreateFixture(&fixture); // SERGI: Box2D complains points are too close in Debug, can be ignores, the code runs
 
 	return true;
 }
