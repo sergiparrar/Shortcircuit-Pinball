@@ -54,7 +54,7 @@ update_status ModuleSceneIntro::Update()
 	back.w = SCREEN_WIDTH;
 	back.h = SCREEN_HEIGHT;
 
-	App->renderer->Blit(background,0,0,&back);
+	App->renderer->Blit(background, 0, 0, &back);
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -174,6 +174,8 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+	App->renderer->Blit(foreground, 0, 0, &back);
 
 	return UPDATE_CONTINUE;
 }
