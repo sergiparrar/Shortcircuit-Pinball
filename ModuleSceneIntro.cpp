@@ -47,14 +47,14 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//Draw background	//DANI --> Causes error
-	SDL_Rect* back = nullptr;
-	back->x = 0;
-	back->y = 0;
-	back->w = SCREEN_WIDTH;
-	back->y = SCREEN_HEIGHT;
+	//Draw background
+	SDL_Rect back;
+	back.x = 0;
+	back.y = 0;
+	back.w = SCREEN_WIDTH;
+	back.h = SCREEN_HEIGHT;
 
-	App->renderer->Blit(background, 0, 0, back, 0);
+	App->renderer->Blit(background,0,0,&back);
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
