@@ -15,3 +15,4 @@ Press esc to exit
 Active members participating on this project:
 
 Dani Garcia | [viriato22](https://github.com/viriato22)
+Sergi Parra | [sergiparrar](https://github.com/sergiparrar)
