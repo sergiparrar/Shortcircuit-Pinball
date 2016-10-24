@@ -301,3 +301,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Exceptions
+# =========================
+!Box2D/lib86/Debug
