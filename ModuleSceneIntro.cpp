@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	ball = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -25,7 +25,7 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
+	ball = App->textures->Load("pinball/pinball_ball.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
@@ -58,7 +58,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 637, 10));
+		circles.add(App->physics->CreateCircle(642, 637, 24));
 		circles.getLast()->data->listener = this;
 		balls++;
 	}
@@ -122,9 +122,10 @@ update_status ModuleSceneIntro::Update()
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 
-	if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) {
+	/*if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) 
+	{
 		//DANI --> Don't know how to place the restitucion
-	}
+	}*/
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -141,8 +142,11 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		SDL_Rect size;
+		size.w = size.h = 30 + 0.027*(y - 95); //SERGI: formula for dynamic resizing of the sprite, may need tweaking
+		size.x = x;
+		size.y = y;
+		App->renderer->Blit(ball, x, y, NULL, 1.0f, 0, &size);
 		c = c->next;
 	}
 
