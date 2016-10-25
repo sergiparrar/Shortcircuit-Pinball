@@ -85,7 +85,7 @@ bool ModulePhysics::Start()
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	pinball_walls->CreateFixture(&fixture); // SERGI: Box2D complains points are too close in Debug, can be ignores, the code runs
+	pinball_walls->CreateFixture(&fixture);
 
 	return true;
 }

@@ -59,6 +59,4 @@ private:
 	b2Body* clicked_body = nullptr;
 	b2Vec2 mouse_position;
 	bool is_clicked = false;
-	
-	
 };

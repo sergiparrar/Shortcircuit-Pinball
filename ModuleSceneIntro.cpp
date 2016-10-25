@@ -32,6 +32,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	launcher = App->physics->CreateRectangleSensor(642, 645, 60, 15);
 
 	return ret;
 }
@@ -56,7 +57,7 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(background, 0, 0, &back);
 
-	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT (DON'T KNOW WHERE THEY SPAWN)
+	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
 		circles.add(App->physics->CreateCircle(642, 637, 10));
 		circles.getLast()->data->listener = this;
 		balls++;
@@ -121,6 +122,9 @@ update_status ModuleSceneIntro::Update()
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 
+	if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) {
+		//DANI --> Don't know how to place the restitucion
+	}
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
