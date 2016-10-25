@@ -56,6 +56,12 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(background, 0, 0, &back);
 
+	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT (DON'T KNOW WHERE THEY SPAWN)
+		circles.add(App->physics->CreateCircle(642, 637, 10));
+		circles.getLast()->data->listener = this;
+		balls++;
+	}
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -65,7 +71,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
 		circles.getLast()->data->listener = this;
 	}
 
