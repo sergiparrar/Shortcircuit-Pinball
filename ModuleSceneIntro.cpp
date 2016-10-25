@@ -34,6 +34,21 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	launcher = App->physics->CreateRectangleSensor(642, 645, 60, 15);
 
+	// DANI --> NEED TO FIX THIS ASAP
+	/*b2Body* leftkickaxis = (b2Body*)App->physics->CreateCircle(216, 558, 14);
+	PhysBody* rightkickaxis;
+	PhysBody* smallkickaxis;
+	b2Body* leftkick = (b2Body*)App->physics->CreateRectangle(216, 558, 97, 24);
+	PhysBody* rightkick;
+	PhysBody* smallkick;
+
+	leftkicker.bodyA = leftkickaxis;
+	leftkicker.bodyB = leftkick;
+	leftkicker.collideConnected = true;
+	leftkicker.enableLimit = true;
+	leftkicker.lowerAngle = -45;
+	leftkicker.upperAngle = 45;*/
+
 	return ret;
 }
 

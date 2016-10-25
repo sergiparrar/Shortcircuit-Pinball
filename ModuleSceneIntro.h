@@ -26,6 +26,10 @@ public:
 	PhysBody* launcher;
 	bool sensed;
 
+	/*b2RevoluteJointDef leftkicker;
+	b2RevoluteJointDef rightkicker;
+	b2RevoluteJointDef smallkicker;*/
+
 	SDL_Texture* ball;
 	SDL_Texture* box;
 	SDL_Texture* rick;
