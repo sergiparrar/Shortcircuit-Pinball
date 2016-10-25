@@ -6,8 +6,8 @@
 #define GRAVITY_X 0.0f
 #define GRAVITY_Y -1.5f
 
-#define PIXELS_PER_METER 350.0f // if touched change METER_PER_PIXEL too
-#define METER_PER_PIXEL 0.003f // this is 1 / PIXELS_PER_METER !
+#define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
+#define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
 
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXELS_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
