@@ -57,7 +57,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT (DON'T KNOW WHERE THEY SPAWN)
-		circles.add(App->physics->CreateCircle(PIXELS_TO_METERS(642), PIXELS_TO_METERS(637), 10));
+		circles.add(App->physics->CreateCircle(642, 637, 10));
 		circles.getLast()->data->listener = this;
 		balls++;
 	}
