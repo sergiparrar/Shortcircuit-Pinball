@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -36,6 +37,10 @@ public:
 	SDL_Texture* rick;
 	SDL_Texture* background;
 	SDL_Texture* foreground;
+	SDL_Texture* image;
+
+	Animation black_hole;
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;

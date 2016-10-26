@@ -29,7 +29,7 @@ bool ModuleTextures::Init()
 		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
 		ret = false;
 	}
-
+	
 	return ret;
 }
 

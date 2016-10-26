@@ -36,34 +36,35 @@ bool ModulePhysics::Start()
 	ground = world->CreateBody(&bd);
 
 	// we define a shape to be our walls of the pinball
-	int pinball_background[54] = {
-		674, 655,
-		507, 55,
-		496, 43,
-		476, 29,
-		440, 18,
-		272, 18,
-		238, 27,
-		212, 41,
-		198, 58,
-		165, 174,
+	int pinball_background[56] = {
+		684, 664,
+		510, 53,
+		500, 36,
+		483, 24,
+		462, 15,
+		435, 9,
+		272, 9,
+		233, 18,
+		207, 33,
+		195, 48,
+		164, 163,
 		189, 234,
 		174, 219,
 		149, 229,
-		181, 343,
-		154, 360,
-		112, 360,
-		60, 545,
+		181, 334,
+		149, 350,
+		110, 350,
+		56, 542,
 		255, 659,
 		315, 762,
 		397, 655,
-		596, 546,
-		553, 357,
-		513, 357,
-		485, 344,
+		601, 541,
+		553, 349,
+		513, 349,
+		486, 335,
 		526, 231,
-		634, 653,
-		688, 653
+		634, 660,
+		689, 655
 	};
 
 	b2BodyDef body;
@@ -73,15 +74,15 @@ bool ModulePhysics::Start()
 	b2Body* pinball_walls = world->CreateBody(&body);
 
 	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[54 / 2];
+	b2Vec2* p = new b2Vec2[56 / 2];
 
-	for (uint i = 0; i < 54 / 2; ++i)
+	for (uint i = 0; i < 56 / 2; ++i)
 	{
 		p[i].x = PIXELS_TO_METERS(pinball_background[i * 2 + 0]);
 		p[i].y = PIXELS_TO_METERS(pinball_background[i * 2 + 1]);
 	}
 
-	shape.CreateLoop(p, 54 / 2);
+	shape.CreateLoop(p, 56 / 2);
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
@@ -131,7 +132,7 @@ bool ModulePhysics::Start()
 		207, 138,
 		225, 47,
 		235, 38,
-		262, 26,
+		263, 28,
 		307, 26,
 		307, 53,
 		269, 62,
