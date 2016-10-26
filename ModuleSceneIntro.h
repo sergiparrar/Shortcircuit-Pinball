@@ -22,7 +22,7 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
-	PhysBody* sensor;
+	PhysBody* out_sensor;
 	PhysBody* launcher;
 	bool sensed;
 

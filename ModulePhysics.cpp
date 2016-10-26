@@ -93,6 +93,16 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
+	while (todelete.count() != 0)
+	{
+		PhysBody* body_to_del = nullptr;
+		todelete.at(0, body_to_del);
+		body_to_del->body->GetWorld()->DestroyBody(body_to_del->body);
+		delete[] body_to_del;
+		todelete.del(todelete.getFirst());
+
+	}
+
 	world->Step(1.0f / 60.0f, 6, 2);
 
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())

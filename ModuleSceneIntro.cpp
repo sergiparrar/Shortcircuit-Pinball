@@ -31,7 +31,7 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	out_sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 	launcher = App->physics->CreateRectangleSensor(642, 645, 60, 15);
 
 	// DANI --> NEED TO FIX THIS ASAP
@@ -213,8 +213,20 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
 
+	if (circles.find(bodyA) != -1 && bodyB == out_sensor)
+	{
+		circles.del(circles.findNode(bodyA));
+		App->physics->todelete.add(bodyA);
+		//SERGI -> Call here function to start new round
+	}
+	else if (circles.find(bodyB) != -1 && bodyA == out_sensor)
+	{
+		circles.del(circles.findNode(bodyB));
+		App->physics->todelete.add(bodyB);
+		//SERGI -> Call here function to start new round
+	}
 	/*
 	if(bodyA)
 	{
