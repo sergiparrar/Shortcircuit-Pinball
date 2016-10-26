@@ -342,10 +342,13 @@ PhysBody* ModulePhysics::CreateBouncer(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, bool dynamic)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	if (dynamic)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
 	body.position.Set(PIXELS_TO_METERS(x), PIXELS_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -428,7 +431,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque)
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, int body_width, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque, bool left)
 {
 	b2RevoluteJointDef rev_joint;
 	rev_joint.bodyA = anchor->body;
@@ -439,7 +442,11 @@ b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody * anchor, PhysBody 
 	rev_joint.enableMotor = enable_motor;
 	b2Vec2 anchor_center_diff(0, 0);
 	rev_joint.localAnchorA = anchor_center_diff;
-	b2Vec2 body_center_diff(-PIXELS_TO_METERS(97/2), 0);
+	b2Vec2 body_center_diff;
+	if (left)
+		body_center_diff = b2Vec2(PIXELS_TO_METERS(-body_width / 2), 0);
+	else
+		body_center_diff = b2Vec2(PIXELS_TO_METERS(body_width / 2), 0);
 	rev_joint.localAnchorB = body_center_diff;
 	if (enable_limit) {
 		rev_joint.lowerAngle = DEGTORAD*min_angle;

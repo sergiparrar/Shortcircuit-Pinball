@@ -22,6 +22,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+	close_time = 0;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -35,22 +36,27 @@ bool ModuleSceneIntro::Start()
 	out_sensor->body->SetSleepingAllowed(false);
 	launcher = App->physics->CreateRectangleSensor(702, 645, 60, 35);
 	launcher->body->SetSleepingAllowed(false);
+	in_block = App->physics->CreateRectangle(545, 235, 32, 10 , false);
+	in_sensor = App->physics->CreateRectangleSensor(545, 251, 32, 20);
 
 	bouncers.add(App->physics->CreateBouncer(306, 100, 8));
 	// DANI --> NEED TO FIX THIS ASAP
-	/*b2Body* leftkickaxis = App->physics->CreateCircle(216, 558, 14)->body;
+	leftkicker_axis = App->physics->CreateCircle(218, 568, 14, false);
+	leftkicker = App->physics->CreateRectangle(218, 568, 87, 24);
+	left_kicker_rev = App->physics->CreateRevoluteJoint(leftkicker_axis, leftkicker, 87, true, 25, -45, false, 0, 200, true);
+
+	rightkicker_axis = App->physics->CreateCircle(430, 568, 14, false);
+	rightkicker = App->physics->CreateRectangle(315, 568, 87, 24);
+	right_kicker_rev = App->physics->CreateRevoluteJoint(rightkicker_axis, rightkicker, 87, true, 45, -25, false, 0, 800, false);
+	
+	/*
 	PhysBody* rightkickaxis;
 	PhysBody* smallkickaxis;
-	b2Body* leftkick = (b2Body*)App->physics->CreateRectangle(216, 558, 97, 24);
+	
 	PhysBody* rightkick;
 	PhysBody* smallkick;
 
-	leftkicker.bodyA = leftkickaxis;
-	leftkicker.bodyB = leftkick;
-	leftkicker.collideConnected = true;
-	leftkicker.enableLimit = true;
-	leftkicker.lowerAngle = -45;
-	leftkicker.upperAngle = 45;*/
+	*/
 
 
 	foreground = App->textures->Load("pinball/foreground.png");
@@ -69,12 +75,17 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::PreUpdate()
 {
 	launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(702), PIXELS_TO_METERS(645)), 0);
+	current_time = SDL_GetTicks();
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleSceneIntro::Update()
 {
+	if (close_time > current_time)
+	{
+		in_block->body->SetActive(true);
+	}
 	//Draw background
 	SDL_Rect back;
 	back.x = 0;
@@ -109,6 +120,16 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(642), PIXELS_TO_METERS(645)), 0);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		leftkicker->body->ApplyTorque(-300, true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		rightkicker->body->ApplyTorque(300, true);
 	}
 
 	/*if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) 
@@ -196,9 +217,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyB == launcher)
 	{
 		bodyA->body->SetAwake(false);
-		bodyA->body->SetLinearVelocity(b2Vec2(0, 0));
+		bodyA->body->SetLinearVelocity(b2Vec2(100, 100));
 		bodyA->body->ApplyForceToCenter(b2Vec2(99000, 99000), true);
 		App->audio->PlayFx(bonus_fx);
 
+	}
+
+	if (bodyB == in_sensor)
+	{
+		in_block->body->SetActive(false);
+		close_time = SDL_GetTicks() + 3000;
 	}
 }

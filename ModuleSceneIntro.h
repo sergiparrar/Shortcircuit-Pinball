@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Box2D/Box2D/Box2D.h"
 
 class PhysBody;
 
@@ -24,11 +25,20 @@ public:
 	p2List<PhysBody*> ricks;
 
 	PhysBody* out_sensor;
+	PhysBody* in_sensor;
 	PhysBody* launcher;
 	bool safeball;
 
-	/*b2RevoluteJointDef leftkicker;
-	b2RevoluteJointDef rightkicker;
+	b2RevoluteJoint* left_kicker_rev;
+	PhysBody* leftkicker_axis;
+	PhysBody* leftkicker;
+
+	b2RevoluteJoint* right_kicker_rev;
+	PhysBody* rightkicker_axis;
+	PhysBody* rightkicker;
+
+	PhysBody* in_block;
+	/*b2RevoluteJointDef rightkicker;
 	b2RevoluteJointDef smallkicker;*/
 
 	SDL_Texture* ball;
@@ -40,4 +50,7 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 	uint balls = 0;
+private:
+	uint32 current_time;
+	uint32 close_time;
 };
