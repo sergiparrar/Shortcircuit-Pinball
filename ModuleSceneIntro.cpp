@@ -31,6 +31,7 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	image = App->textures->Load("pinball/image.png");
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
@@ -56,8 +57,15 @@ bool ModuleSceneIntro::Start()
 	PhysBody* rightkick;
 	PhysBody* smallkick;
 
-	*/
 
+	*/
+	black_hole.PushBack({ 4, 3, 90, 70 });
+	black_hole.PushBack({ 4, 49, 90, 70 });
+	black_hole.PushBack({ 4, 95, 90, 70 });
+	black_hole.PushBack({ 4, 141, 90, 70 });
+	black_hole.PushBack({ 4, 187, 90, 70 });
+	black_hole.loop = true;
+	black_hole.speed = 10;
 
 	foreground = App->textures->Load("pinball/foreground.png");
 	return ret;
@@ -96,7 +104,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 613, 14));
+		circles.add(App->physics->CreateCircle(642, 613, 8)); //Sergi had it at 14
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->body->SetSleepingAllowed(false);
 		circles.getLast()->data->body->SetFixedRotation(0);
@@ -113,7 +121,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
 		circles.getLast()->data->listener = this;
 	}
 
@@ -196,6 +204,8 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+
+	App->renderer->Blit(image, 292, 113, &(black_hole.GetCurrentFrame()), 1.0f);
 
 	return UPDATE_CONTINUE;
 }

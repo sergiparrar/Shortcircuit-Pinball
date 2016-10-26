@@ -4,6 +4,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -38,14 +39,16 @@ public:
 	PhysBody* rightkicker;
 
 	PhysBody* in_block;
-	/*b2RevoluteJointDef rightkicker;
-	b2RevoluteJointDef smallkicker;*/
 
 	SDL_Texture* ball;
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* background;
 	SDL_Texture* foreground;
+	SDL_Texture* image;
+
+	Animation black_hole;
+
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
