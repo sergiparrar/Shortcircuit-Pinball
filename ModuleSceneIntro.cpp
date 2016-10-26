@@ -31,7 +31,7 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	out_sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	launcher = App->physics->CreateRectangleSensor(642, 645, 60, 15);
 
 	// DANI --> NEED TO FIX THIS ASAP
