@@ -25,6 +25,7 @@ bool ModuleSceneIntro::Start()
 	close_time_in = 0;
 	close_time_top = 0;
 
+
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	ball = App->textures->Load("pinball/pinball_ball.png"); 
@@ -44,6 +45,10 @@ bool ModuleSceneIntro::Start()
 	in_sensor = App->physics->CreateRectangleSensor(545, 271, 32, 20);
 	top_block = App->physics->CreateRectangle(303, 17, 9, 22, false);
 	top_sensor = App->physics->CreateRectangleSensor(280, 17, 9, 22);
+
+
+	top_screen_sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH/2, 50, SCREEN_WIDTH, 100);
+	mid_screen_sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, 150, SCREEN_WIDTH, 450);
 
 	bouncers.add(App->physics->CreateBouncer(306, 100, 8));
 	// DANI --> NEED TO FIX THIS ASAP
@@ -89,6 +94,13 @@ update_status ModuleSceneIntro::PreUpdate()
 {
 	launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(712), PIXELS_TO_METERS(645)), 0);
 	current_time = SDL_GetTicks();
+	while (bodies_to_copy.count() != 0)
+	{
+		App->physics->ChangeRadius(bodies_to_copy.getFirst()->data, radius_to_copy.getFirst()->data);
+		
+		bodies_to_copy.del(bodies_to_copy.getFirst());
+		radius_to_copy.del(radius_to_copy.getFirst());
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -233,7 +245,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyB == launcher)
 	{
 		bodyA->body->SetAwake(false);
-		bodyA->body->SetLinearVelocity(b2Vec2(0, -600));
+		bodyA->body->SetLinearVelocity(b2Vec2(0, -700));
 		App->audio->PlayFx(bonus_fx);
 
 	}
@@ -248,5 +260,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		top_block->body->SetActive(false);
 		close_time_top = SDL_GetTicks() + 1000;
+	}
+	
+	if (bodyB == top_screen_sensor  && bodyA->width != 8)
+	{
+		bodies_to_copy.add(bodyA);
+		radius_to_copy.add(8);
+	}
+	if (bodyB == mid_screen_sensor && bodyA->width != 14)
+	{
+		bodies_to_copy.add(bodyA);
+		radius_to_copy.add(14);
 	}
 }

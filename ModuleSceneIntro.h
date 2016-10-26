@@ -10,6 +10,10 @@ class PhysBody;
 
 class ModuleSceneIntro : public Module
 {
+private:
+	p2List<PhysBody*> bodies_to_copy;
+	p2List<int> radius_to_copy;
+
 public:
 	ModuleSceneIntro(Application* app, bool start_enabled = true);
 	~ModuleSceneIntro();
@@ -29,6 +33,8 @@ public:
 	PhysBody* in_sensor;
 	PhysBody* top_sensor;
 	PhysBody* launcher;
+	PhysBody* top_screen_sensor;
+	PhysBody* mid_screen_sensor;
 	bool safeball;
 
 	b2RevoluteJoint* left_kicker_rev;
@@ -61,4 +67,7 @@ private:
 	uint32 current_time;
 	uint32 close_time_in;
 	uint32 close_time_top;
+	uint32 counter;
+
+	
 };

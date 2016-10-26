@@ -442,6 +442,21 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+void ModulePhysics::ChangeRadius(PhysBody * body, int radius)
+{
+	b2Fixture* fixtureA = body->body->GetFixtureList();
+	body->body->DestroyFixture(fixtureA);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXELS_TO_METERS(radius);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	body->body->CreateFixture(&fixture);
+}
+
 b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, int body_width, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque, bool left)
 {
 	b2RevoluteJointDef rev_joint;

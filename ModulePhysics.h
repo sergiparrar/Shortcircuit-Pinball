@@ -47,6 +47,8 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bool dynamic = true);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+
+	void ChangeRadius(PhysBody* body, int radius);
 	b2RevoluteJoint * CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, int body_width, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque, bool left);
 
 	// b2ContactListener ---
