@@ -33,11 +33,8 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	image = App->textures->Load("pinball/images.png");
-<<<<<<< HEAD
 	lkicker = App->textures->Load("pinball/left_kicker.png");
 	rkicker = App->textures->Load("pinball/right_kicker.png");
-=======
->>>>>>> origin/master
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
@@ -212,9 +209,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(image, 292, 113, &(black_hole.GetCurrentFrame()), 1.0f);
 	
-	App->renderer->Blit(lkicker, 218, 540, NULL, 1.0f, leftkicker->GetRotation());
-	App->renderer->Blit(rkicker, 338, 547, NULL, 1.0f, rightkicker->GetRotation());
-
+	App->renderer->Blit(lkicker, 216, 557, NULL, 1.0f, leftkicker->GetRotation(), NULL, left_kicker_rev->GetAnchorA().x, left_kicker_rev->GetAnchorA().y);
+	App->renderer->Blit(rkicker, 342, 557, NULL, 1.0f, rightkicker->GetRotation(), NULL, 95, 14);
+	
 	App->renderer->Blit(foreground, 0, 0, &back);
 	return UPDATE_CONTINUE;
 }
