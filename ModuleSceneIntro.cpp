@@ -31,7 +31,9 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	image = App->textures->Load("pinball/image.png");
+	image = App->textures->Load("pinball/images.png");
+	lkicker = App->textures->Load("pinball/left_kicker.png");
+	rkicker = App->textures->Load("pinball/right_kicker.png");
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
@@ -59,13 +61,13 @@ bool ModuleSceneIntro::Start()
 
 
 	*/
-	black_hole.PushBack({ 4, 3, 90, 70 });
-	black_hole.PushBack({ 4, 49, 90, 70 });
-	black_hole.PushBack({ 4, 95, 90, 70 });
-	black_hole.PushBack({ 4, 141, 90, 70 });
-	black_hole.PushBack({ 4, 187, 90, 70 });
+	black_hole.PushBack({ 4, 3, 90, 47 });
+	black_hole.PushBack({ 4, 49, 90, 47 });
+	black_hole.PushBack({ 4, 95, 90, 47 });
+	black_hole.PushBack({ 4, 141, 90, 47 });
+	black_hole.PushBack({ 4, 187, 90, 47 });
 	black_hole.loop = true;
-	black_hole.speed = 10;
+	black_hole.speed = 0.08f;
 
 	foreground = App->textures->Load("pinball/foreground.png");
 	return ret;
@@ -139,11 +141,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		rightkicker->body->ApplyTorque(300, true);
 	}
-
-	/*if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) 
-	{
-		//DANI --> Don't know how to place the restitucion
-	}*/
+	
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -206,7 +204,11 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	App->renderer->Blit(image, 292, 113, &(black_hole.GetCurrentFrame()), 1.0f);
+	
+	App->renderer->Blit(lkicker, 218, 540, NULL, 1.0f, leftkicker->GetRotation());
+	App->renderer->Blit(rkicker, 338, 547, NULL, 1.0f, rightkicker->GetRotation());
 
+	App->renderer->Blit(foreground, 0, 0, &back);
 	return UPDATE_CONTINUE;
 }
 

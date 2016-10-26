@@ -46,6 +46,8 @@ public:
 	SDL_Texture* background;
 	SDL_Texture* foreground;
 	SDL_Texture* image;
+	SDL_Texture* lkicker;
+	SDL_Texture* rkicker;
 
 	Animation black_hole;
 
