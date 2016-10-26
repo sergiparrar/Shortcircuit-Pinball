@@ -22,7 +22,8 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
-	close_time = 0;
+	close_time_in = 0;
+	close_time_top = 0;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -31,22 +32,24 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	image = App->textures->Load("pinball/image.png");
+	image = App->textures->Load("pinball/images.png");
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
 	launcher = App->physics->CreateRectangleSensor(702, 645, 60, 35);
 	launcher->body->SetSleepingAllowed(false);
-	in_block = App->physics->CreateRectangle(545, 235, 32, 10 , false);
-	in_sensor = App->physics->CreateRectangleSensor(545, 251, 32, 20);
+	in_block = App->physics->CreateCircle(545, 235, 14, 1);
+	in_sensor = App->physics->CreateRectangleSensor(545, 271, 32, 20);
+	top_block = App->physics->CreateRectangle(303, 17, 9, 22, false);
+	top_sensor = App->physics->CreateRectangleSensor(280, 17, 9, 22);
 
 	bouncers.add(App->physics->CreateBouncer(306, 100, 8));
 	// DANI --> NEED TO FIX THIS ASAP
-	leftkicker_axis = App->physics->CreateCircle(218, 568, 14, false);
+	leftkicker_axis = App->physics->CreateCircle(218, 568, 14, 1);
 	leftkicker = App->physics->CreateRectangle(218, 568, 87, 24);
 	left_kicker_rev = App->physics->CreateRevoluteJoint(leftkicker_axis, leftkicker, 87, true, 25, -45, false, 0, 200, true);
 
-	rightkicker_axis = App->physics->CreateCircle(430, 568, 14, false);
+	rightkicker_axis = App->physics->CreateCircle(430, 568, 14, 1);
 	rightkicker = App->physics->CreateRectangle(315, 568, 87, 24);
 	right_kicker_rev = App->physics->CreateRevoluteJoint(rightkicker_axis, rightkicker, 87, true, 45, -25, false, 0, 800, false);
 	
@@ -82,7 +85,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::PreUpdate()
 {
-	launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(702), PIXELS_TO_METERS(645)), 0);
+	launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(712), PIXELS_TO_METERS(645)), 0);
 	current_time = SDL_GetTicks();
 
 	return UPDATE_CONTINUE;
@@ -90,10 +93,11 @@ update_status ModuleSceneIntro::PreUpdate()
 
 update_status ModuleSceneIntro::Update()
 {
-	if (close_time > current_time)
-	{
+	if (current_time > close_time_in)
 		in_block->body->SetActive(true);
-	}
+
+	if (current_time > close_time_top)
+		top_block->body->SetActive(true);
 	//Draw background
 	SDL_Rect back;
 	back.x = 0;
@@ -104,7 +108,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 613, 8)); //Sergi had it at 14
+		circles.add(App->physics->CreateCircle(642, 613, 16)); //Sergi had it at 14
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->body->SetSleepingAllowed(false);
 		circles.getLast()->data->body->SetFixedRotation(0);
@@ -125,7 +129,7 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT)
 	{
 		launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(642), PIXELS_TO_METERS(645)), 0);
 	}
@@ -227,8 +231,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyB == launcher)
 	{
 		bodyA->body->SetAwake(false);
-		bodyA->body->SetLinearVelocity(b2Vec2(100, 100));
-		bodyA->body->ApplyForceToCenter(b2Vec2(99000, 99000), true);
+		bodyA->body->SetLinearVelocity(b2Vec2(0, -600));
 		App->audio->PlayFx(bonus_fx);
 
 	}
@@ -236,6 +239,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bodyB == in_sensor)
 	{
 		in_block->body->SetActive(false);
-		close_time = SDL_GetTicks() + 3000;
+		close_time_in = SDL_GetTicks() + 1000;
+	}
+
+	if (bodyB == top_sensor)
+	{
+		top_block->body->SetActive(false);
+		close_time_top = SDL_GetTicks() + 1000;
 	}
 }

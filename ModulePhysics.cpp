@@ -280,13 +280,21 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, const int type)
 {
 	b2BodyDef body;
-	if (dynamic)
+	switch (type)
+	{
+	case 0:
 		body.type = b2_dynamicBody;
-	else
+		break;
+	case 1:
 		body.type = b2_staticBody;
+		break;
+	case 2:
+		body.type = b2_kinematicBody;
+		break;
+	}
 	body.position.Set(PIXELS_TO_METERS(x), PIXELS_TO_METERS(y));
 
 
@@ -346,10 +354,12 @@ PhysBody* ModulePhysics::CreateBouncer(int x, int y, int radius)
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, bool dynamic)
 {
 	b2BodyDef body;
+	
 	if (dynamic)
 		body.type = b2_dynamicBody;
 	else
 		body.type = b2_staticBody;
+
 	body.position.Set(PIXELS_TO_METERS(x), PIXELS_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

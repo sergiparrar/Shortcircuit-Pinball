@@ -27,6 +27,7 @@ public:
 
 	PhysBody* out_sensor;
 	PhysBody* in_sensor;
+	PhysBody* top_sensor;
 	PhysBody* launcher;
 	bool safeball;
 
@@ -39,6 +40,7 @@ public:
 	PhysBody* rightkicker;
 
 	PhysBody* in_block;
+	PhysBody* top_block;
 
 	SDL_Texture* ball;
 	SDL_Texture* box;
@@ -55,5 +57,6 @@ public:
 	uint balls = 0;
 private:
 	uint32 current_time;
-	uint32 close_time;
+	uint32 close_time_in;
+	uint32 close_time_top;
 };
