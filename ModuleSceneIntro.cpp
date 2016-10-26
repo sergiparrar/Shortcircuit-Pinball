@@ -37,7 +37,7 @@ bool ModuleSceneIntro::Start()
 	launcher->body->SetSleepingAllowed(false);
 
 	// DANI --> NEED TO FIX THIS ASAP
-	/*b2Body* leftkickaxis = (b2Body*)App->physics->CreateCircle(216, 558, 14);
+	/*b2Body* leftkickaxis = App->physics->CreateCircle(216, 558, 14)->body;
 	PhysBody* rightkickaxis;
 	PhysBody* smallkickaxis;
 	b2Body* leftkick = (b2Body*)App->physics->CreateRectangle(216, 558, 97, 24);
@@ -51,6 +51,8 @@ bool ModuleSceneIntro::Start()
 	leftkicker.lowerAngle = -45;
 	leftkicker.upperAngle = 45;*/
 
+
+	foreground = App->textures->Load("pinball/foreground.png");
 	return ret;
 }
 

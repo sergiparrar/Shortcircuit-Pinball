@@ -87,6 +87,43 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	pinball_walls->CreateFixture(&fixture);
 
+	int right_side[34] = {
+		502, 181,
+		504, 164,
+		481, 60,
+		457, 42,
+		425, 27,
+		395, 27,
+		395, 54,
+		415, 54,
+		418, 109,
+		455, 167,
+		463, 168,
+		452, 70,
+		479, 70,
+		500, 170,
+		470, 241,
+		476, 243,
+		499, 188
+	};
+
+	b2Body* right = world->CreateBody(&body);
+
+	b2ChainShape nshape;
+	b2Vec2* q = new b2Vec2[34 / 2];
+
+	for (uint i = 0; i < 34 / 2; ++i)
+	{
+		q[i].x = PIXELS_TO_METERS(right_side[i * 2 + 0]);
+		q[i].y = PIXELS_TO_METERS(right_side[i * 2 + 1]);
+	}
+
+	nshape.CreateLoop(q, 34 / 2);
+
+	b2FixtureDef nfixture;
+	nfixture.shape = &nshape;
+	right->CreateFixture(&nfixture);
+
 	return true;
 }
 
