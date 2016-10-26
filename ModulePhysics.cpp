@@ -156,11 +156,15 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	if (dynamic)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
 	body.position.Set(PIXELS_TO_METERS(x), PIXELS_TO_METERS(y));
+
 
 	b2Body* b = world->CreateBody(&body);
 
@@ -299,6 +303,33 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+b2RevoluteJoint* ModulePhysics::CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque)
+{
+	b2RevoluteJointDef rev_joint;
+	rev_joint.bodyA = anchor->body;
+	rev_joint.bodyB = body->body;
+	rev_joint.collideConnected = false;
+	rev_joint.type = e_revoluteJoint;
+	rev_joint.enableLimit = enable_limit;
+	rev_joint.enableMotor = enable_motor;
+	b2Vec2 anchor_center_diff(0, 0);
+	rev_joint.localAnchorA = anchor_center_diff;
+	b2Vec2 body_center_diff(-PIXELS_TO_METERS(97/2), 0);
+	rev_joint.localAnchorB = body_center_diff;
+	if (enable_limit) {
+		rev_joint.lowerAngle = DEGTORAD*min_angle;
+		rev_joint.upperAngle = DEGTORAD*max_angle;
+	}
+	if (enable_motor) {
+		rev_joint.motorSpeed = motor_speed;
+		rev_joint.maxMotorTorque = max_torque;
+	}
+
+	b2RevoluteJoint* rev = (b2RevoluteJoint*)world->CreateJoint(&rev_joint);
+
+	return rev;
 }
 
 // 

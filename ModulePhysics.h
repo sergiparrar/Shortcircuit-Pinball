@@ -42,11 +42,12 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
 	PhysBody * CreateBouncer(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	b2RevoluteJoint * CreateRevoluteJoint(PhysBody * anchor, PhysBody * body, bool enable_limit, float max_angle, float min_angle, bool enable_motor, int motor_speed, int max_torque);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -56,6 +57,7 @@ public:
 
 
 private:
+
 
 	bool debug;
 	b2World* world;
