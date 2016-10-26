@@ -109,20 +109,143 @@ bool ModulePhysics::Start()
 
 	b2Body* right = world->CreateBody(&body);
 
-	b2ChainShape nshape;
-	b2Vec2* q = new b2Vec2[34 / 2];
+	b2ChainShape rshape;
+	b2Vec2* r = new b2Vec2[34 / 2];
 
 	for (uint i = 0; i < 34 / 2; ++i)
 	{
-		q[i].x = PIXELS_TO_METERS(right_side[i * 2 + 0]);
-		q[i].y = PIXELS_TO_METERS(right_side[i * 2 + 1]);
+		r[i].x = PIXELS_TO_METERS(right_side[i * 2 + 0]);
+		r[i].y = PIXELS_TO_METERS(right_side[i * 2 + 1]);
 	}
 
-	nshape.CreateLoop(q, 34 / 2);
+	rshape.CreateLoop(r, 34 / 2);
 
-	b2FixtureDef nfixture;
-	nfixture.shape = &nshape;
-	right->CreateFixture(&nfixture);
+	b2FixtureDef rfixture;
+	rfixture.shape = &rshape;
+	right->CreateFixture(&rfixture);
+
+	int left_side[26] = {
+		231, 125,
+		221, 127,
+		219, 140,
+		207, 138,
+		225, 47,
+		235, 38,
+		262, 26,
+		307, 26,
+		307, 53,
+		269, 62,
+		262, 128,
+		252, 128,
+		245, 125
+	};
+
+	b2Body* left = world->CreateBody(&body);
+
+	b2ChainShape lshape;
+	b2Vec2* l = new b2Vec2[26 / 2];
+
+	for (uint i = 0; i < 26 / 2; ++i)
+	{
+		l[i].x = PIXELS_TO_METERS(left_side[i * 2 + 0]);
+		l[i].y = PIXELS_TO_METERS(left_side[i * 2 + 1]);
+	}
+
+	lshape.CreateLoop(l, 26 / 2);
+
+	b2FixtureDef lfixture;
+	lfixture.shape = &lshape;
+	left->CreateFixture(&lfixture);
+
+	int helix_form[36] = {
+		387, 243,
+		384, 162,
+		372, 152,
+		298, 152,
+		287, 162,
+		283, 244,
+		295, 244,
+		295, 184,
+		301, 176,
+		313, 168,
+		331, 163,
+		347, 164,
+		362, 169,
+		370, 177,
+		372, 193,
+		373, 214,
+		373, 243,
+		383, 243
+	};
+
+	b2Body* helix = world->CreateBody(&body);
+
+	b2ChainShape hshape;
+	b2Vec2* h = new b2Vec2[36 / 2];
+
+	for (uint i = 0; i < 36 / 2; ++i)
+	{
+		h[i].x = PIXELS_TO_METERS(helix_form[i * 2 + 0]);
+		h[i].y = PIXELS_TO_METERS(helix_form[i * 2 + 1]);
+	}
+
+	hshape.CreateLoop(h, 36 / 2);
+
+	b2FixtureDef hfixture;
+	hfixture.shape = &hshape;
+	helix->CreateFixture(&hfixture);
+
+	int right_bar[12] = {
+		434, 557,
+		538, 500,
+		517, 384,
+		522, 383,
+		547, 508,
+		434, 563
+	};
+
+	b2Body* rightbar = world->CreateBody(&body);
+
+	b2ChainShape rbshape;
+	b2Vec2* rb = new b2Vec2[12 / 2];
+
+	for (uint i = 0; i < 12 / 2; ++i)
+	{
+		rb[i].x = PIXELS_TO_METERS(right_bar[i * 2 + 0]);
+		rb[i].y = PIXELS_TO_METERS(right_bar[i * 2 + 1]);
+	}
+
+	rbshape.CreateLoop(rb, 12 / 2);
+
+	b2FixtureDef rbfixture;
+	rbfixture.shape = &rbshape;
+	rightbar->CreateFixture(&rbfixture);
+
+	int left_bar[12] = {
+		144, 387,
+		118, 501,
+		220, 556,
+		215, 563,
+		113, 503,
+		140, 383
+	};
+
+	b2Body* leftbar = world->CreateBody(&body);
+
+	b2ChainShape lbshape;
+	b2Vec2* lb = new b2Vec2[12 / 2];
+
+	for (uint i = 0; i < 12 / 2; ++i)
+	{
+		lb[i].x = PIXELS_TO_METERS(left_bar[i * 2 + 0]);
+		lb[i].y = PIXELS_TO_METERS(left_bar[i * 2 + 1]);
+	}
+
+	lbshape.CreateLoop(lb, 12 / 2);
+
+	b2FixtureDef lbfixture;
+	lbfixture.shape = &lbshape;
+	leftbar->CreateFixture(&lbfixture);
 
 	return true;
 }
