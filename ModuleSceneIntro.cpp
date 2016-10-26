@@ -33,6 +33,8 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	right_kicker_fx = App->audio->LoadFx("pinball/rightkicker.wav");
+	left_kicker_fx = App->audio->LoadFx("pinball/leftkicker.wav");
 	image = App->textures->Load("pinball/images.png");
 	lkicker = App->textures->Load("pinball/left_kicker.png");
 	rkicker = App->textures->Load("pinball/right_kicker.png");
@@ -51,14 +53,18 @@ bool ModuleSceneIntro::Start()
 	mid_screen_sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, 150, SCREEN_WIDTH, 450);
 
 	bouncers.add(App->physics->CreateBouncer(306, 100, 8));
+	bouncers.add(App->physics->CreateBouncer(376, 100, 8));
+	bouncers.add(App->physics->CreateBouncer(340, 75, 6));
 	// DANI --> NEED TO FIX THIS ASAP
 	leftkicker_axis = App->physics->CreateCircle(218, 568, 14, 1);
 	leftkicker = App->physics->CreateRectangle(218, 568, 87, 24);
-	left_kicker_rev = App->physics->CreateRevoluteJoint(leftkicker_axis, leftkicker, 87, true, 25, -45, false, 0, 200, true);
+	left_kicker_rev = App->physics->CreateRevoluteJoint(leftkicker_axis, leftkicker, 87, true, 25, -40, true, -300, 200, true);
+	left_kicker_rev->EnableMotor(false);
 
 	rightkicker_axis = App->physics->CreateCircle(430, 568, 14, 1);
 	rightkicker = App->physics->CreateRectangle(315, 568, 87, 24);
-	right_kicker_rev = App->physics->CreateRevoluteJoint(rightkicker_axis, rightkicker, 87, true, 45, -25, false, 0, 800, false);
+	right_kicker_rev = App->physics->CreateRevoluteJoint(rightkicker_axis, rightkicker, 87, true, 40, -25, true, 300, 800, false);
+	right_kicker_rev->EnableMotor(false);
 	
 	/*
 	PhysBody* rightkickaxis;
@@ -148,15 +154,22 @@ update_status ModuleSceneIntro::Update()
 		launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(642), PIXELS_TO_METERS(645)), 0);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
 	{
-		leftkicker->body->ApplyTorque(-300, true);
-	}
+		left_kicker_rev->EnableMotor(true);
+		App->audio->PlayFx(left_kicker_fx);
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		rightkicker->body->ApplyTorque(300, true);
 	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+		left_kicker_rev->EnableMotor(false);
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	{
+		right_kicker_rev->EnableMotor(true);
+		App->audio->PlayFx(right_kicker_fx);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+		right_kicker_rev->EnableMotor(false);
 	
 	// Prepare for raycast ------------------------------------------------------
 	

@@ -59,7 +59,10 @@ public:
 
 	Animation black_hole;
 
+	
 	uint bonus_fx;
+	uint right_kicker_fx;
+	uint left_kicker_fx;
 	p2Point<int> ray;
 	bool ray_on;
 	uint balls = 0;

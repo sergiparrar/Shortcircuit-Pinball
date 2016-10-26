@@ -325,7 +325,7 @@ PhysBody* ModulePhysics::CreateBouncer(int x, int y, int radius)
 	b2Body* b = world->CreateBody(&body);
 
 	b2CircleShape shape;
-	shape.m_p.Set(-radius, 0);
+	shape.m_p.Set(-PIXELS_TO_METERS(radius), 0);
 	shape.m_radius = PIXELS_TO_METERS(radius);
 	
 	b2FixtureDef fixture;
@@ -335,7 +335,7 @@ PhysBody* ModulePhysics::CreateBouncer(int x, int y, int radius)
 
 	b->CreateFixture(&fixture);
 
-	shape.m_p.Set(radius, 0);
+	shape.m_p.Set(PIXELS_TO_METERS(radius), 0);
 
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
