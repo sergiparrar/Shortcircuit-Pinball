@@ -11,7 +11,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 {
 	ball = box = rick = NULL;
 	ray_on = false;
-	sensed = false;
+	safeball = false;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -33,9 +33,10 @@ bool ModuleSceneIntro::Start()
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
-	launcher = App->physics->CreateRectangleSensor(702, 645, 60, 15);
+	launcher = App->physics->CreateRectangleSensor(702, 645, 60, 35);
 	launcher->body->SetSleepingAllowed(false);
 
+	bouncers.add(App->physics->CreateBouncer(306, 100, 8));
 	// DANI --> NEED TO FIX THIS ASAP
 	/*b2Body* leftkickaxis = App->physics->CreateCircle(216, 558, 14)->body;
 	PhysBody* rightkickaxis;
@@ -84,9 +85,11 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 613, 12));
+		circles.add(App->physics->CreateCircle(642, 613, 14));
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->body->SetSleepingAllowed(false);
+		circles.getLast()->data->body->SetFixedRotation(0);
+
 		balls++;
 	}
 
@@ -101,11 +104,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10));
 		circles.getLast()->data->listener = this;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -140,8 +138,6 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(ball, x, y, NULL, 1.0f, 0, &size);
 		c = c->next;
 	}
-
-	c = boxes.getFirst();
 
 	while(c != NULL)
 	{
@@ -180,8 +176,6 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
-	App->renderer->Blit(foreground, 0, 0, &back);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -201,9 +195,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (bodyB == launcher)
 	{
-		bodyA->body->SetAwake(true);
-		//bodyA->body->SetLinearVelocity(b2Vec2(0, 2000));
-		bodyA->body->ApplyForceToCenter(b2Vec2(0, 1999999), true);
+		bodyA->body->SetAwake(false);
+		bodyA->body->SetLinearVelocity(b2Vec2(0, 0));
+		bodyA->body->ApplyForceToCenter(b2Vec2(99000, 99000), true);
 		App->audio->PlayFx(bonus_fx);
 
 	}

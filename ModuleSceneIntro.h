@@ -20,12 +20,12 @@ public:
 
 public:
 	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
+	p2List<PhysBody*> bouncers;
 	p2List<PhysBody*> ricks;
 
 	PhysBody* out_sensor;
 	PhysBody* launcher;
-	bool sensed;
+	bool safeball;
 
 	/*b2RevoluteJointDef leftkicker;
 	b2RevoluteJointDef rightkicker;
