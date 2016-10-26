@@ -33,6 +33,7 @@ bool ModuleSceneIntro::Start()
 	rick = App->textures->Load("pinball/rick_head.png");
 	background = App->textures->Load("pinball/background.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	ball_saved = App->audio->LoadFx("pinball/ballsave.wav");
 	right_kicker_fx = App->audio->LoadFx("pinball/rightkicker.wav");
 	left_kicker_fx = App->audio->LoadFx("pinball/leftkicker.wav");
 	image = App->textures->Load("pinball/images.png");
@@ -252,7 +253,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		circles.del(circles.findNode(bodyA));
 		App->physics->todelete.add(bodyA);
 		balls--;
-		App->audio->PlayFx(bonus_fx);
+		App->audio->PlayFx(ball_saved);
 		//SERGI -> Call here function to start new round
 	}
 	if (bodyB == launcher)
