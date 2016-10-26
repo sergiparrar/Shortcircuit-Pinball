@@ -39,6 +39,7 @@ bool ModuleSceneIntro::Start()
 	image = App->textures->Load("pinball/images.png");
 	lkicker = App->textures->Load("pinball/left_kicker.png");
 	rkicker = App->textures->Load("pinball/right_kicker.png");
+	App->audio->PlayMusic("pinball/main_music.wav");
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
 	out_sensor->body->SetSleepingAllowed(false);
