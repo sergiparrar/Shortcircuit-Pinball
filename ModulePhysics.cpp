@@ -62,8 +62,8 @@ bool ModulePhysics::Start()
 		513, 357,
 		485, 344,
 		526, 231,
-		634, 660,
-		689, 655
+		634, 653,
+		688, 653
 	};
 
 	b2BodyDef body;
@@ -169,6 +169,41 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateBouncer(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXELS_TO_METERS(x), PIXELS_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_p.Set(-radius, 0);
+	shape.m_radius = PIXELS_TO_METERS(radius);
+	
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	shape.m_p.Set(radius, 0);
+
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = 1.0f;
 
 	b->CreateFixture(&fixture);
 
