@@ -32,7 +32,9 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	out_sensor = App->physics->CreateRectangleSensor(326, SCREEN_HEIGHT + 50, 150, 50);
-	launcher = App->physics->CreateRectangleSensor(642, 645, 60, 15);
+	out_sensor->body->SetSleepingAllowed(false);
+	launcher = App->physics->CreateRectangleSensor(702, 645, 60, 15);
+	launcher->body->SetSleepingAllowed(false);
 
 	// DANI --> NEED TO FIX THIS ASAP
 	/*b2Body* leftkickaxis = (b2Body*)App->physics->CreateCircle(216, 558, 14);
@@ -73,8 +75,9 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 637, 24));
+		circles.add(App->physics->CreateCircle(642, 600, 12));
 		circles.getLast()->data->listener = this;
+		circles.getLast()->data->body->SetSleepingAllowed(false);
 		balls++;
 	}
 
@@ -96,45 +99,9 @@ update_status ModuleSceneIntro::Update()
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+		launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(642), PIXELS_TO_METERS(645)), 0);
 	}
 
 	/*if (SDL_SCANCODE_BACKSPACE == KEY_DOWN && App->scene_intro->launcher->listener->OnCollision == true) 
@@ -213,19 +180,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	//App->audio->PlayFx(bonus_fx);
+	//
 
-	if (circles.find(bodyA) != -1 && bodyB == out_sensor)
+	if (bodyB == out_sensor)
 	{
 		circles.del(circles.findNode(bodyA));
 		App->physics->todelete.add(bodyA);
+		balls--;
+		App->audio->PlayFx(bonus_fx);
 		//SERGI -> Call here function to start new round
 	}
-	else if (circles.find(bodyB) != -1 && bodyA == out_sensor)
+	if (bodyB == launcher)
 	{
-		circles.del(circles.findNode(bodyB));
-		App->physics->todelete.add(bodyB);
-		//SERGI -> Call here function to start new round
+		bodyA->body->SetAwake(true);
+		//bodyA->body->SetLinearVelocity(b2Vec2(0, 2000));
+		bodyA->body->ApplyForceToCenter(b2Vec2(0, 1999999), true);
+		App->audio->PlayFx(bonus_fx);
+
 	}
 	/*
 	if(bodyA)
