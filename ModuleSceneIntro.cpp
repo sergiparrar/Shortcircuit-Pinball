@@ -63,6 +63,13 @@ bool ModuleSceneIntro::CleanUp()
 }
 
 // Update: draw background
+update_status ModuleSceneIntro::PreUpdate()
+{
+	launcher->body->SetTransform(b2Vec2(PIXELS_TO_METERS(702), PIXELS_TO_METERS(645)), 0);
+
+	return UPDATE_CONTINUE;
+}
+
 update_status ModuleSceneIntro::Update()
 {
 	//Draw background
@@ -75,7 +82,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background, 0, 0, &back);
 
 	if (balls == 0) { //DANI --> CREATES BALLS BY DEFAULT
-		circles.add(App->physics->CreateCircle(642, 600, 12));
+		circles.add(App->physics->CreateCircle(642, 613, 12));
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->body->SetSleepingAllowed(false);
 		balls++;
@@ -198,16 +205,4 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		App->audio->PlayFx(bonus_fx);
 
 	}
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
